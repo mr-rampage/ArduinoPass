@@ -15,17 +15,9 @@ let private handshake(connection: IConnection) =
             else Error "Invalid handshake"
     with
     | e -> Error e.Message
-
-let private disconnect(connectionAttempt: Result<IConnection, string>) =
-    match connectionAttempt with
-    | Ok connection -> connection.disconnect()
-    | Error _ -> ()
-    connectionAttempt
         
-let private discoveryProtocol (device: IConnectable) =
-    device.connect()
-        |> Result.bind handshake
-        |> disconnect
+let private tryConnectDevice (device: IConnectable) =
+    device.connect() |> Result.bind handshake
         
 let private isConnected = isOk
 
@@ -33,6 +25,6 @@ let private toConnection = toOption
 
 let discover (devices: seq<IConnectable>) =
     devices
-    |> Seq.map discoveryProtocol
+    |> Seq.map tryConnectDevice
     |> Seq.tryFind isConnected
     |> Option.bind toConnection

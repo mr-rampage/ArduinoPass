@@ -1,5 +1,6 @@
 ﻿module ArduinoPass.Arduino
 
+open System
 open System.IO.Ports
 open ArduinoPass.Core.Device
 
@@ -9,6 +10,11 @@ type Arduino =
     new(portName: ConnectionString) = {
         serialPort = new SerialPort(portName)
     }
+    
+    interface IDisposable with
+        member this.Dispose() =
+            this.serialPort.Close()
+            this.serialPort.Dispose()
 
     interface IConnectable with
         member this.connect() =
@@ -38,5 +44,5 @@ type Arduino =
             this.serialPort.Close()
 
 let devices = SerialPort.GetPortNames()
-                |> Seq.map Arduino
-                |> Seq.map(fun arduino -> arduino :> IConnectable)
+                |> Seq.map (fun portName -> new Arduino(portName))
+                |> Seq.map (fun arduino -> arduino :> IConnectable)
