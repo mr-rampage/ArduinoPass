@@ -13,9 +13,9 @@ int btnState[3];
 
 Adafruit_SSD1306 display = Adafruit_SSD1306(128, 32, &Wire);
 
-typedef enum { WAITING, READY, BUSY } State;
+typedef enum { WAITING, ACKNOWLEDGE, READY, AUTHENTICATED, BUSY } State;
 
-typedef enum { NOOP, GREET, DATA } Command;
+typedef enum { NOOP, GREET, AUTHENTICATE, DATA } Command;
 
 State mode = WAITING;
 Command command = NOOP;
@@ -36,9 +36,7 @@ void loop() {
   if (Serial.available() > 0) {
     printMessage("Processing");
     command = adaptCommand(Serial.readString());
-    State previousMode = mode;
-    mode = validateCommand(mode, command);
-    publishChange(previousMode, mode);
+    mode = next(mode, validateCommand(mode, command));
     displayState(mode);
   }
   
@@ -66,15 +64,16 @@ Command adaptCommand(String unverifiedCommand) {
 
 State validateCommand(State currentState, Command verifiedCommand) {
   if (verifiedCommand == GREET && currentState == WAITING) {
-    return READY;
+    return ACKNOWLEDGE;
   }
   return currentState;
 }
 
-State publishChange(State previousState, State newState) {
-  if (previousState == WAITING && newState == READY) {
+State next(State previousState, State newState) {
+  if (previousState == WAITING && newState == ACKNOWLEDGE) {
     Serial.println(HANDSHAKE_RESPONSE);
     printMessage("ACK sent!");
+    return READY;
   }
 
   return newState;
