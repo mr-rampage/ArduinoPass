@@ -107,6 +107,8 @@ void printMessage(String message) {
 void initializeOled() {
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C); // Address 0x3C for 128x32
   display.display();
+  delay(500);
+  
   display.setTextSize(1);
   display.setTextColor(SSD1306_WHITE);
 }

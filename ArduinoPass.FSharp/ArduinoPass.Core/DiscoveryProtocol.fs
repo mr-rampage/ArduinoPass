@@ -12,10 +12,12 @@ let private handshake(connection: IConnection) =
         let response = connection.receive()
         if response.Equals HANDSHAKE_ACK
             then Ok connection
-            else Error "Invalid handshake"
+            else
+                connection.disconnect()
+                Error "Invalid handshake"
     with
     | e -> Error e.Message
-        
+
 let private tryConnectDevice (device: IConnectable) =
     device.connect() |> Result.bind handshake
         
