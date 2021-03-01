@@ -1,7 +1,7 @@
 ﻿module ArduinoPass.Cli
     
 open System
-open ArduinoPass.Core.ConnectionProtocol
+open ArduinoPass.Core.DiscoveryProtocol
 open ArduinoPass.Arduino
 
 [<EntryPoint>]

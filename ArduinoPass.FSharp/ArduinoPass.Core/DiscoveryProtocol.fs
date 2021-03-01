@@ -1,19 +1,15 @@
-﻿module ArduinoPass.Core.ConnectionProtocol
+﻿module ArduinoPass.Core.DiscoveryProtocol
 
 open ArduinoPass.Core.Device
 let private HANDSHAKE_GREET = "CONNECT"
 let private HANDSHAKE_ACK = "OK"
 
-let private sendHandshake (device: IDevice) =
-    device.send(HANDSHAKE_GREET)
-    Ok device
+let private sendHandshake (device: IQueriableDevice) =
+    device.greet(HANDSHAKE_GREET)
 
-let private awaitAcknowledgement (device: IDevice) =
+let private awaitAcknowledgement (device: IUnverfiedDevice) =
     try 
-        let response = device.receive()
-        if response.Equals HANDSHAKE_ACK
-            then Ok device
-            else Error "No acknowledgement"
+        device.awaitAcknowledgement(HANDSHAKE_ACK)
     with
     | e -> Error e.Message
         
@@ -21,13 +17,13 @@ let private tee sideEffect = fun x ->
     sideEffect()
     x
 
-let private discoveryProtocol (device: IDevice) =
+let private discoveryProtocol (device: IConnectable) =
     device.connect()
-        |> Result.bind sendHandshake
+        |> Result.map sendHandshake
         |> Result.bind awaitAcknowledgement
         |> tee device.disconnect
         
-let discover (devices: seq<IDevice>) : Option<IDevice> =
+let discover (devices: seq<IConnectable>) : Option<IConnectable> =
     devices
     |> Seq.tryFind(fun device ->
             match discoveryProtocol device with

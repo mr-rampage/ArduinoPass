@@ -4,6 +4,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ArduinoPass.Cli", "ArduinoP
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ArduinoPass.Core", "ArduinoPass.Core\ArduinoPass.Core.fsproj", "{DA72C8C9-74A9-4CD6-8467-9B681C429229}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ArduinoPass.Core.Test", "ArduinoPass.Core.Test\ArduinoPass.Core.Test.fsproj", "{DCB1ACAF-99B7-47A1-B92E-BE65988623F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{DA72C8C9-74A9-4CD6-8467-9B681C429229}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA72C8C9-74A9-4CD6-8467-9B681C429229}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA72C8C9-74A9-4CD6-8467-9B681C429229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCB1ACAF-99B7-47A1-B92E-BE65988623F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCB1ACAF-99B7-47A1-B92E-BE65988623F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCB1ACAF-99B7-47A1-B92E-BE65988623F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCB1ACAF-99B7-47A1-B92E-BE65988623F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
