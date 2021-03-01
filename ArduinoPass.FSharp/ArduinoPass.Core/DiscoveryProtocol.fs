@@ -1,32 +1,38 @@
 ﻿module ArduinoPass.Core.DiscoveryProtocol
 
 open ArduinoPass.Core.Device
+open ArduinoPass.Core.Helpers
+
 let private HANDSHAKE_GREET = "CONNECT"
 let private HANDSHAKE_ACK = "OK"
 
-let private sendHandshake (device: IQueriableDevice) =
-    device.greet(HANDSHAKE_GREET)
-
-let private awaitAcknowledgement (device: IUnverfiedDevice) =
-    try 
-        device.awaitAcknowledgement(HANDSHAKE_ACK)
+let private handshake(connection: IConnection) =
+    try
+        connection.send(HANDSHAKE_GREET)
+        let response = connection.receive()
+        if response.Equals HANDSHAKE_ACK
+            then Ok connection
+            else Error "Invalid handshake"
     with
     | e -> Error e.Message
-        
-let private tee sideEffect = fun x ->
-    sideEffect()
-    x
 
+let private disconnect(connectionAttempt: Result<IConnection, string>) =
+    match connectionAttempt with
+    | Ok connection -> connection.disconnect()
+    | Error _ -> ()
+    connectionAttempt
+        
 let private discoveryProtocol (device: IConnectable) =
     device.connect()
-        |> Result.map sendHandshake
-        |> Result.bind awaitAcknowledgement
-        |> tee device.disconnect
+        |> Result.bind handshake
+        |> disconnect
         
-let discover (devices: seq<IConnectable>) : Option<IConnectable> =
+let private isConnected = isOk
+
+let private toConnection = toOption
+
+let discover (devices: seq<IConnectable>) =
     devices
-    |> Seq.tryFind(fun device ->
-            match discoveryProtocol device with
-            | Ok _ -> true
-            | Error _ -> false
-        )
+    |> Seq.map discoveryProtocol
+    |> Seq.tryFind isConnected
+    |> Option.bind toConnection
