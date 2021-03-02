@@ -1,9 +1,9 @@
 #ifndef Communication_h
 #define Communication_h
 
-void initializeCommunication();
+#include "Arduino.h"
 
-void sendPassword(String password);
+void initializeCommunication();
 
 void onButtonA(void (* callback)());
 
@@ -11,5 +11,6 @@ void onButtonB(void (* callback)());
 
 void onButtonC(void (* callback)()); 
 
+void sendPassword(String password);
 
 #endif

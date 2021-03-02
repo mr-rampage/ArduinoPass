@@ -1,6 +1,7 @@
 #include "Screen.h"
 #include "Flux.h"
 #include "Communication.h"
+#include "Storage.h"
 
 State mode = WAITING;
 
@@ -9,7 +10,10 @@ void setup() {
   Serial.begin(9600);
   initializeCommunication();
   initializeOled();
-  printMessage("Waiting");
+  if (!initializeStorage()) {
+    printMessage("Storage unavailable");
+    while(1);
+  }
 }
 
 void loop() {
@@ -22,6 +26,7 @@ void loop() {
 
   onButtonA(&reset);
   onButtonB(&sendText);
+  onButtonC(&savePassword);
 }
 
 void reset() {
@@ -49,5 +54,16 @@ void displayState(State currentState) {
 void sendText() {
   if (mode == READY) {
     sendPassword("Hello!");
+  }
+}
+
+void savePassword() {
+  if (mode == READY) {
+    if (appendToFile("test.txt", "Hello, World!"))
+    {
+      printMessage("Saved!");
+    } else {
+      printMessage("Error saving!");
+    }  
   }
 }

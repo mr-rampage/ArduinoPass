@@ -1,4 +1,3 @@
-#include "Arduino.h"
 #include "Communication.h"
 #include "Keyboard.h"
 
@@ -8,7 +7,7 @@
 
 #define RE(signal, state) (state=(state<<1)|(signal&1)&3)==1
 
-int btnState[3];
+short btnState[3];
 
 void initializeCommunication()
 {
