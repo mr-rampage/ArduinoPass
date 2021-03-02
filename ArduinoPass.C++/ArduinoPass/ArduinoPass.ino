@@ -11,7 +11,7 @@ void setup() {
   initializeCommunication();
   initializeOled();
   if (!initializeStorage()) {
-    printMessage("Storage unavailable");
+    printMessage(":(");
     while (1);
   }
 }
@@ -19,7 +19,6 @@ void setup() {
 void loop() {
   // if we get a valid byte, read analog ins:
   if (Serial.available() > 0) {
-    printMessage("Processing");
     mode = next(mode, Serial.readString());
     displayState(mode);
   }
@@ -46,7 +45,7 @@ void displayState(State currentState) {
       printMessage("Busy");
       break;
     default:
-      printMessage("Bad State");
+      printMessage(":(");
       break;
   }
 }
@@ -63,7 +62,7 @@ void savePassword() {
     {
       printMessage("Saved!");
     } else {
-      printMessage("Error saving!");
+      printMessage(":(");
     }
   }
 }

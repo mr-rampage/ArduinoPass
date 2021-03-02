@@ -1,13 +1,13 @@
 #include "Communication.h"
-#include "Keyboard.h"
+#include <Keyboard.h>
 
-#define BUTTON_A 9
-#define BUTTON_B 6
-#define BUTTON_C 5
+#define BUTTON_A 9 // PINB B0000 0010
+#define BUTTON_B 6 // PIND B0100 0000
+#define BUTTON_C 5 // PIND B0010 0000
 
 #define RE(signal, state) (state=(state<<1)|(signal&1)&3)==1
 
-short btnState[3];
+uint8_t btnState[3];
 
 void initializeCommunication()
 {
