@@ -7,13 +7,10 @@ State mode = WAITING;
 
 void setup() {
   // start serial port at 9600 bps:
-  Serial.begin(9600);
   initializeCommunication();
+  Serial.begin(9600);
   initializeOled();
-  if (!initializeStorage()) {
-    printMessage(":(");
-    while (1);
-  }
+  initializeStorage();
 }
 
 void loop() {

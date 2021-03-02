@@ -1,21 +1,19 @@
 #include "Storage.h"
-#include <SPI.h>
-#include <SD.h>
+#include <Wire.h>
+
+#define STORAGE_ADDR 9
 
 bool initializeStorage()
 {
-  return SD.begin(4);
+  Wire.begin();
+  return true;
 }
 
 bool appendToFile(String filename, String line)
 {
-  File storage = SD.open(filename, FILE_WRITE);
-
-  if (storage) {
-    storage.println(line);
-    storage.close();
-    return true;
-  } else {
-    return false;
-  }
+  String payload = filename + ":" + line;
+  Wire.beginTransmission(STORAGE_ADDR);
+  Wire.write(payload.c_str());
+  Wire.endTransmission();
+  return true;
 }

@@ -1,5 +1,5 @@
 #include "Communication.h"
-#include <Keyboard.h>
+#include <TinyUSB_Mouse_and_Keyboard.h>
 
 #define BUTTON_A 9 // PINB B0000 0010
 #define BUTTON_B 6 // PIND B0100 0000
