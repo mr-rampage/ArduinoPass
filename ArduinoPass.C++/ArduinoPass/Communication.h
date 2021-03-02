@@ -7,9 +7,9 @@ void initializeCommunication();
 
 void onButtonA(void (* callback)());
 
-void onButtonB(void (* callback)()); 
+void onButtonB(void (* callback)());
 
-void onButtonC(void (* callback)()); 
+void onButtonC(void (* callback)());
 
 void sendPassword(String password);
 

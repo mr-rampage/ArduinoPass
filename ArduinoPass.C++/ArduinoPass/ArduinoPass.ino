@@ -12,7 +12,7 @@ void setup() {
   initializeOled();
   if (!initializeStorage()) {
     printMessage("Storage unavailable");
-    while(1);
+    while (1);
   }
 }
 
@@ -64,6 +64,6 @@ void savePassword() {
       printMessage("Saved!");
     } else {
       printMessage("Error saving!");
-    }  
+    }
   }
 }
